@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="student"
+            type="com.example.myapplication.database.student.Student" />
+
+        <variable
+            name="isCreation"
+            type="java.lang.Boolean" />
+
+        <variable
+            name="handler"
+            type="com.example.myapplication.ViewFragment" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="6dp"
+        android:background="?attr/recycleViewBackground"
+        tools:context=".ViewFragment">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:boxBackgroundColor="@android:color/transparent"
+            android:background="@android:color/transparent"
+            app:helperTextEnabled="false">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/colorOnPrimary"
+                android:hint="@string/student_last_name"
+                android:inputType="text"
+                android:text="@={student.lastName}" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:boxBackgroundColor="@android:color/transparent"
+            android:background="@android:color/transparent"
+            app:helperTextEnabled="false">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/colorOnPrimary"
+                android:hint="@string/student_first_name"
+                android:inputType="text"
+                android:text="@={student.firstName}" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:layout_marginTop="10dp"
+            android:background="?attr/colorOnPrimary">
+
+            <Spinner
+                style="@style/Widget.AppCompat.DropDownItem.Spinner"
+                android:id="@+id/groups"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/student_group"
+                android:spinnerMode="dropdown"
+                android:selectedItemPosition="@={student.groupId}" />
+        </RelativeLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:boxBackgroundColor="@android:color/transparent"
+            android:background="@android:color/transparent"
+            app:helperTextEnabled="false">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/colorOnPrimary"
+                android:hint="@string/student_phone"
+                android:inputType="phone"
+                android:text="@={student.phone}" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:boxBackgroundColor="@android:color/transparent"
+            android:background="@android:color/transparent"
+            app:helperTextEnabled="false">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/colorOnPrimary"
+                android:hint="@string/student_email"
+                android:inputType="textEmailAddress"
+                android:text="@={student.email}" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> handler.onSave(student)}"
+            android:text="@string/button_save"
+            android:visibility="@{isCreation ? View.VISIBLE : View.GONE}" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> handler.onUpdate(student)}"
+            android:text="@string/button_update"
+            android:visibility="@{isCreation ? View.GONE : View.VISIBLE}" />
+
+    </LinearLayout>
+</layout>
