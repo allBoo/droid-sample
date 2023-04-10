@@ -1,12 +1,17 @@
 package com.example.myapplication;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,14 +26,19 @@ import com.example.myapplication.paging.article.ArticleViewModel;
 import com.example.myapplication.paging.fine.FineViewModel;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import android.content.Context;
 
 public class ViewFragment extends Fragment {
+    private final static DateTimeFormatter shortDateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
     private final CompositeDisposable mDisposable = new CompositeDisposable();
 
@@ -152,5 +162,26 @@ public class ViewFragment extends Fragment {
         mDisposable.add(fineViewModel.update(checkAndSetArticle(fine))
                 .subscribe(() -> Navigation.findNavController(getView()).popBackStack(),
                         ErrorUtils.onError(getView())));
+    }
+
+    public void showDateTimePicker(Fine fine) {
+        OffsetDateTime dt = fine.getIssueDateTime() != null ? fine.getIssueDateTime() : OffsetDateTime.now();
+
+        new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                OffsetDateTime dt1 = dt.withYear(year).withMonth(monthOfYear).withDayOfMonth(dayOfMonth);
+
+                new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        OffsetDateTime dt2 = dt1.withHour(hourOfDay).withMinute(minute);
+                        ((TextInputEditText) getView().findViewById(R.id.fine_date_time)).setText(dt2.format(shortDateFormatter));
+
+                        Log.v("FINE", "The choosen one " + dt2);
+                    }
+                }, dt1.getHour(), dt1.getMinute(), true).show();
+            }
+        }, dt.getYear(), dt.getMonthValue(), dt.getDayOfMonth()).show();
     }
 }

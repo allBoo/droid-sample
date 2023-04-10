@@ -54,12 +54,14 @@
             app:helperTextEnabled="false">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/fine_date_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/colorOnPrimary"
                 android:hint="@string/fine_issue_date_time"
                 android:inputType="text"
-                android:text="@={fine.issueDateTime}" />
+                android:onClick="@{() -> handler.showDateTimePicker(fine)}"
+                android:text="@={fine.issueDateTimeString}" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <RelativeLayout
@@ -94,7 +96,7 @@
                 android:background="?attr/colorOnPrimary"
                 android:hint="@string/fine_fine_amount"
                 android:inputType="numberSigned"
-                android:text="@={`` + fine.fineAmount}" />
+                android:text="@={fine.fineAmountRub}" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -113,6 +115,13 @@
                 android:inputType="textEmailAddress"
                 android:text="@={fine.email}" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switch1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/fine_payed"
+            android:checked="@={fine.payed}"/>
 
         <Button
             android:layout_width="match_parent"

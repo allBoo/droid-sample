@@ -11,11 +11,15 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import com.example.myapplication.database.article.Article;
 import com.example.myapplication.database.fine.Fine;
 
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.concurrent.Executors;
 
 public final class Database {
-    private static final String DB_NAME = "fines-demo";
+    private static final String DB_NAME = "fines-demo_v2";
     private static volatile AppDatabase database;
+
+    private final static DateTimeFormatter formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 
     private Database() {
     }
@@ -27,12 +31,12 @@ public final class Database {
                 article1, article2
         ).subscribe().dispose();
         getDatabase(applicationContext).fineDao().insert(
-                new Fine("A555AT73", "2023-03-17T07:23:19.120+00:00",
-                        article1, 80000, "email1@mail.ru"),
-                new Fine("A555AT73", "2023-03-18T15:44:55.155+00:00",
-                        article1, 100000, "email2@mail.ru"),
-                new Fine("X123XA99", "2023-04-01T12:51:19.198+00:00",
-                        article2, 150000, "email3@mail.ru")
+                new Fine("A555AT73", OffsetDateTime.parse("2023-03-17T07:23:19.120+00:00", formatter),
+                        article1, 80000, "email1@mail.ru", false),
+                new Fine("A555AT73", OffsetDateTime.parse("2023-03-18T15:44:55.155+00:00", formatter),
+                        article1, 100000, "email2@mail.ru", false),
+                new Fine("X123XA99", OffsetDateTime.parse("2023-04-01T12:51:19.198+00:00", formatter),
+                        article2, 150000, "email3@mail.ru", false)
         ).subscribe().dispose();
         Log.d(Database.class.getSimpleName(), "Populated");
     }
@@ -50,8 +54,8 @@ public final class Database {
                     };
                     database = Room
                             .databaseBuilder(applicationContext, AppDatabase.class, DB_NAME)
-//                            .fallbackToDestructiveMigration()
-//                            .addCallback(populateCallback)
+                            .fallbackToDestructiveMigration()
+                            .addCallback(populateCallback)
                             .build();
                 }
             }
