@@ -170,7 +170,7 @@ public class ViewFragment extends Fragment {
         new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                OffsetDateTime dt1 = dt.withYear(year).withMonth(monthOfYear).withDayOfMonth(dayOfMonth);
+                OffsetDateTime dt1 = dt.withYear(year).withMonth(monthOfYear + 1).withDayOfMonth(dayOfMonth);
 
                 new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
                     @Override
@@ -182,6 +182,6 @@ public class ViewFragment extends Fragment {
                     }
                 }, dt1.getHour(), dt1.getMinute(), true).show();
             }
-        }, dt.getYear(), dt.getMonthValue(), dt.getDayOfMonth()).show();
+        }, dt.getYear(), dt.getMonthValue() - 1, dt.getDayOfMonth()).show();
     }
 }
