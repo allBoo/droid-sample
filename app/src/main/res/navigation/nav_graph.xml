@@ -20,9 +20,9 @@
         android:label="@string/view_fragment_title"
         tools:layout="@layout/fragment_view">
         <argument
-            android:name="student"
+            android:name="fine"
             app:nullable="true"
             android:defaultValue="@null"
-            app:argType="com.example.myapplication.database.student.Student" />
+            app:argType="com.example.myapplication.database.fine.Fine" />
     </fragment>
 </navigation>

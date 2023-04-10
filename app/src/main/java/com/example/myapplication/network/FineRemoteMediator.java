@@ -8,10 +8,10 @@ import androidx.paging.PagingState;
 import androidx.paging.rxjava3.RxRemoteMediator;
 
 import com.example.myapplication.database.AppDatabase;
-import com.example.myapplication.database.group.Group;
-import com.example.myapplication.database.group.GroupDao;
-import com.example.myapplication.database.student.Student;
-import com.example.myapplication.database.student.StudentDao;
+import com.example.myapplication.database.article.Article;
+import com.example.myapplication.database.fine.Fine;
+import com.example.myapplication.database.fine.FineDao;
+import com.example.myapplication.database.article.ArticleDao;
 
 import java.io.IOException;
 import java.util.List;
@@ -26,27 +26,27 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 import retrofit2.HttpException;
 
 @OptIn(markerClass = ExperimentalPagingApi.class)
-public class StudentRemoteMediator extends RxRemoteMediator<Integer, Student> {
+public class FineRemoteMediator extends RxRemoteMediator<Integer, Fine> {
     private static final int LIMIT = 10;
 
     private final AtomicBoolean isEnd = new AtomicBoolean(false);
 
-    private final StudentApi studentApi;
+    private final FineApi fineApi;
     private final AppDatabase database;
-    private final StudentDao studentDao;
-    private final GroupDao groupDao;
+    private final FineDao fineDao;
+    private final ArticleDao articleDao;
 
-    public StudentRemoteMediator(StudentApi studentApi, AppDatabase database) {
-        this.studentApi = studentApi;
+    public FineRemoteMediator(FineApi fineApi, AppDatabase database) {
+        this.fineApi = fineApi;
         this.database = database;
-        this.studentDao = database.studentDao();
-        this.groupDao = database.groupDao();
+        this.fineDao = database.fineDao();
+        this.articleDao = database.articleDao();
     }
 
     @NonNull
     @Override
     public Single<MediatorResult> loadSingle(@NonNull LoadType loadType,
-                                             @NonNull PagingState<Integer, Student> pagingState) {
+                                             @NonNull PagingState<Integer, Fine> pagingState) {
         switch (loadType) {
             case REFRESH:
                 isEnd.set(false);
@@ -57,30 +57,30 @@ public class StudentRemoteMediator extends RxRemoteMediator<Integer, Student> {
                 return Single.just(new MediatorResult.Success(true));
         }
 
-        return studentApi.getGroups()
+        return fineApi.getArticles()
                 .subscribeOn(Schedulers.io())
-                .flatMap((Function<List<Group>, ObservableSource<List<Student>>>) groupResponse -> {
+                .flatMap((Function<List<Article>, ObservableSource<List<Fine>>>) articleResponse -> {
                     final AtomicInteger page = new AtomicInteger(1);
                     database.runInTransaction(() -> {
                         if (loadType == LoadType.REFRESH) {
-                            groupDao.deleteAllSync();
-                            groupDao.insertSync(groupResponse.toArray(new Group[0]));
+                            articleDao.deleteAllSync();
+                            articleDao.insertSync(articleResponse.toArray(new Article[0]));
                         }
                         if (loadType == LoadType.APPEND) {
-                            page.set(studentDao.getStudentsCount().blockingGet() / LIMIT + 1);
+                            page.set(fineDao.getFinesCount().blockingGet() / LIMIT + 1);
                         }
                         if (isEnd.get()) {
                             page.getAndIncrement();
                         }
                     });
-                    return studentApi.getStudents(page.get(), LIMIT);
+                    return fineApi.getFines(page.get(), LIMIT);
                 })
-                .map((Function<List<Student>, MediatorResult>) response -> {
+                .map((Function<List<Fine>, MediatorResult>) response -> {
                     database.runInTransaction(() -> {
                         if (loadType == LoadType.REFRESH) {
-                            studentDao.delete(response.toArray(new Student[0])).blockingAwait();
+                            fineDao.delete(response.toArray(new Fine[0])).blockingAwait();
                         }
-                        studentDao.insert(response.toArray(new Student[0])).blockingAwait();
+                        fineDao.insert(response.toArray(new Fine[0])).blockingAwait();
                         isEnd.set(response.size() < LIMIT);
                     });
                     return new MediatorResult.Success(response.size() == 0);
@@ -94,15 +94,15 @@ public class StudentRemoteMediator extends RxRemoteMediator<Integer, Student> {
                 });
     }
 
-    public Observable<Student> create(Student student) {
-        return studentApi.createStudent(student);
+    public Observable<Fine> create(Fine fine) {
+        return fineApi.createFine(fine);
     }
 
-    public Observable<Student> update(Student student) {
-        return studentApi.updateStudent(student.getId(), student);
+    public Observable<Fine> update(Fine fine) {
+        return fineApi.updateFine(fine.getId(), fine);
     }
 
-    public Observable<Student> delete(Student student) {
-        return studentApi.deleteStudent(student.getId());
+    public Observable<Fine> delete(Fine fine) {
+        return fineApi.deleteFine(fine.getId());
     }
 }

@@ -13,12 +13,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import com.example.myapplication.database.group.Group;
-import com.example.myapplication.database.student.Student;
+import com.example.myapplication.database.article.Article;
+import com.example.myapplication.database.fine.Fine;
 import com.example.myapplication.databinding.FragmentViewBinding;
 import com.example.myapplication.paging.ViewModelFactory;
-import com.example.myapplication.paging.group.GroupViewModel;
-import com.example.myapplication.paging.student.StudentViewModel;
+import com.example.myapplication.paging.article.ArticleViewModel;
+import com.example.myapplication.paging.fine.FineViewModel;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
@@ -32,20 +32,20 @@ public class ViewFragment extends Fragment {
 
     private final CompositeDisposable mDisposable = new CompositeDisposable();
 
-    private StudentViewModel studentViewModel;
-    private GroupViewModel groupViewModel;
-    private final List<Group> groupList = new ArrayList<>();
+    private FineViewModel fineViewModel;
+    private ArticleViewModel articleViewModel;
+    private final List<Article> articleList = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (studentViewModel == null) {
-            studentViewModel = new ViewModelFactory(requireActivity())
-                    .create(StudentViewModel.class);
+        if (fineViewModel == null) {
+            fineViewModel = new ViewModelFactory(requireActivity())
+                    .create(FineViewModel.class);
         }
-        if (groupViewModel == null) {
-            groupViewModel = new ViewModelFactory(requireActivity())
-                    .create(GroupViewModel.class);
+        if (articleViewModel == null) {
+            articleViewModel = new ViewModelFactory(requireActivity())
+                    .create(ArticleViewModel.class);
         }
     }
 
@@ -54,28 +54,28 @@ public class ViewFragment extends Fragment {
                              ViewGroup container,
                              Bundle savedInstanceState) {
         final ViewFragmentArgs args = ViewFragmentArgs.fromBundle(getArguments());
-        final Student student = args.getStudent();
+        final Fine fine = args.getFine();
         final FragmentViewBinding binding =
                 FragmentViewBinding.inflate(inflater, container, false);
-        binding.setStudent(Optional.ofNullable(student)
-                .orElse(new Student()));
-        binding.setIsCreation(student == null);
+        binding.setFine(Optional.ofNullable(fine)
+                .orElse(new Fine()));
+        binding.setIsCreation(fine == null);
         binding.setHandler(this);
 
-        final Spinner groupsView = binding.getRoot().findViewById(R.id.groups);
-        final ArrayAdapter<Group> groupAdapter = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_dropdown_item, groupList);
-        groupAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        groupsView.setAdapter(groupAdapter);
+        final Spinner articlesView = binding.getRoot().findViewById(R.id.articles);
+        final ArrayAdapter<Article> articleAdapter = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_spinner_dropdown_item, articleList);
+        articleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        articlesView.setAdapter(articleAdapter);
 
-        mDisposable.add(groupViewModel.getGroups()
-                .subscribe(dbGroups -> {
-                    groupList.clear();
-                    groupList.add(new Group(0, ""));
-                    groupList.addAll(dbGroups);
-                    groupAdapter.notifyDataSetChanged();
-                    if (student != null) {
-                        groupsView.setSelection(getGroupPosition(groupList, student.getGroupId()));
+        mDisposable.add(articleViewModel.getArticles()
+                .subscribe(dbArticles -> {
+                    articleList.clear();
+                    articleList.add(new Article(0, ""));
+                    articleList.addAll(dbArticles);
+                    articleAdapter.notifyDataSetChanged();
+                    if (fine != null) {
+                        articlesView.setSelection(getArticlePosition(articleList, fine.getArticleId()));
                     }
                 }, ErrorUtils.onError(getView())));
 
@@ -93,9 +93,9 @@ public class ViewFragment extends Fragment {
         view.setError(error);
     }
 
-    private int getGroupPosition(List<Group> groups, int groupId) {
-        for (int i = 0; i < groups.size(); i++) {
-            if (Objects.equals(groups.get(i).getId(), groupId)) {
+    private int getArticlePosition(List<Article> articles, int articleId) {
+        for (int i = 0; i < articles.size(); i++) {
+            if (Objects.equals(articles.get(i).getId(), articleId)) {
                 return i;
             }
         }
@@ -128,28 +128,28 @@ public class ViewFragment extends Fragment {
         return false;
     }
 
-    private Student checkAndSetGroup(Student student) {
-        if (student.getGroupId() == 0) {
-            throw new IllegalArgumentException("GroupId is 0");
+    private Fine checkAndSetArticle(Fine fine) {
+        if (fine.getArticleId() == 0) {
+            throw new IllegalArgumentException("ArticleId is 0");
         }
-        student.setGroup(groupList.get(student.getGroupId()));
-        return student;
+        fine.setArticle(articleList.get(fine.getArticleId()));
+        return fine;
     }
 
-    public void onSave(Student student) {
+    public void onSave(Fine fine) {
         if (isEmptyValues(getView(), getString(R.string.empty_value))) {
             return;
         }
-        mDisposable.add(studentViewModel.insert(checkAndSetGroup(student))
+        mDisposable.add(fineViewModel.insert(checkAndSetArticle(fine))
                 .subscribe(() -> Navigation.findNavController(getView()).popBackStack(),
                         ErrorUtils.onError(getView())));
     }
 
-    public void onUpdate(Student student) {
+    public void onUpdate(Fine fine) {
         if (isEmptyValues(getView(), getString(R.string.empty_value))) {
             return;
         }
-        mDisposable.add(studentViewModel.update(checkAndSetGroup(student))
+        mDisposable.add(fineViewModel.update(checkAndSetArticle(fine))
                 .subscribe(() -> Navigation.findNavController(getView()).popBackStack(),
                         ErrorUtils.onError(getView())));
     }

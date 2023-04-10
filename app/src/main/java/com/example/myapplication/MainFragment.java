@@ -19,12 +19,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.myapplication.MainFragmentDirections.ActionMainFragmentToViewFragment;
-import com.example.myapplication.database.student.Student;
+import com.example.myapplication.database.fine.Fine;
 import com.example.myapplication.paging.ViewModelFactory;
-import com.example.myapplication.paging.student.StudentAdapter;
-import com.example.myapplication.paging.student.StudentComparator;
-import com.example.myapplication.paging.student.StudentViewHolder;
-import com.example.myapplication.paging.student.StudentViewModel;
+import com.example.myapplication.paging.fine.FineAdapter;
+import com.example.myapplication.paging.fine.FineComparator;
+import com.example.myapplication.paging.fine.FineViewHolder;
+import com.example.myapplication.paging.fine.FineViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -32,15 +32,15 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 public class MainFragment extends Fragment {
     private final CompositeDisposable mDisposable = new CompositeDisposable();
 
-    private StudentViewModel studentViewModel;
-    private StudentAdapter studentAdapter;
+    private FineViewModel fineViewModel;
+    private FineAdapter fineAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (studentViewModel == null) {
-            studentViewModel = new ViewModelFactory(requireActivity())
-                    .create(StudentViewModel.class);
+        if (fineViewModel == null) {
+            fineViewModel = new ViewModelFactory(requireActivity())
+                    .create(FineViewModel.class);
         }
     }
 
@@ -49,16 +49,16 @@ public class MainFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_main, container, false);
 
-        studentAdapter = new StudentAdapter(new StudentComparator(), (p, d) -> studentOnClick(d));
-        final RecyclerView recyclerView = view.findViewById(R.id.students_list);
-        recyclerView.setAdapter(studentAdapter);
+        fineAdapter = new FineAdapter(new FineComparator(), (p, d) -> fineOnClick(d));
+        final RecyclerView recyclerView = view.findViewById(R.id.fines_list);
+        recyclerView.setAdapter(fineAdapter);
 
-        FloatingActionButton addStudentButton = view.findViewById(R.id.student_add_button);
-        addStudentButton.setOnClickListener((v) -> studentAddOnCLick());
+        FloatingActionButton addFineButton = view.findViewById(R.id.fine_add_button);
+        addFineButton.setOnClickListener((v) -> fineAddOnCLick());
 
         final SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swipe_refresh);
         swipeRefreshLayout.setOnRefreshListener(() -> {
-            studentAdapter.refresh();
+            fineAdapter.refresh();
             swipeRefreshLayout.setRefreshing(false);
         });
 
@@ -72,8 +72,8 @@ public class MainFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        mDisposable.add(studentViewModel.getStudents()
-                .subscribe(pagingData -> studentAdapter.submitData(getLifecycle(), pagingData),
+        mDisposable.add(fineViewModel.getFines()
+                .subscribe(pagingData -> fineAdapter.submitData(getLifecycle(), pagingData),
                         ErrorUtils.onError(getView()))
         );
     }
@@ -89,9 +89,9 @@ public class MainFragment extends Fragment {
             @Override
             public int getMovementFlags(@NonNull RecyclerView recyclerView,
                                         @NonNull RecyclerView.ViewHolder viewHolder) {
-                final StudentViewHolder studentViewHolder = (StudentViewHolder) viewHolder;
-                final Student student = studentViewHolder.getBinding().getStudent();
-                if (student != null) {
+                final FineViewHolder fineViewHolder = (FineViewHolder) viewHolder;
+                final Fine fine = fineViewHolder.getBinding().getFine();
+                if (fine != null) {
                     return makeMovementFlags(0, ItemTouchHelper.LEFT);
                 } else {
                     return makeMovementFlags(0, 0);
@@ -108,11 +108,11 @@ public class MainFragment extends Fragment {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder,
                                  int direction) {
-                final StudentViewHolder studentViewHolder = (StudentViewHolder) viewHolder;
-                final Student student = studentViewHolder.getBinding().getStudent();
-                if (student != null) {
-                    mDisposable.add(studentViewModel.delete(student)
-                            .subscribe(() -> studentAdapter.refresh(),
+                final FineViewHolder fineViewHolder = (FineViewHolder) viewHolder;
+                final Fine fine = fineViewHolder.getBinding().getFine();
+                if (fine != null) {
+                    mDisposable.add(fineViewModel.delete(fine)
+                            .subscribe(() -> fineAdapter.refresh(),
                                     ErrorUtils.onError(getView())));
                 }
             }
@@ -129,25 +129,25 @@ public class MainFragment extends Fragment {
             @Override
             public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
                 if (menuItem.getItemId() == R.id.action_refresh) {
-                    studentAdapter.refresh();
+                    fineAdapter.refresh();
                 }
                 return true;
             }
         }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
     }
 
-    private void navigateToViewFragment(View view, Student student) {
+    private void navigateToViewFragment(View view, Fine fine) {
         final ActionMainFragmentToViewFragment action =
                 MainFragmentDirections.actionMainFragmentToViewFragment();
-        action.setStudent(student);
+        action.setFine(fine);
         Navigation.findNavController(view).navigate(action);
     }
 
-    public void studentOnClick(Student student) {
-        navigateToViewFragment(getView(), student);
+    public void fineOnClick(Fine fine) {
+        navigateToViewFragment(getView(), fine);
     }
 
-    public void studentAddOnCLick() {
+    public void fineAddOnCLick() {
         navigateToViewFragment(getView(), null);
     }
 }

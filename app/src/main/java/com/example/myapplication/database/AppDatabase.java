@@ -3,14 +3,14 @@ package com.example.myapplication.database;
 import androidx.room.Database;
 import androidx.room.RoomDatabase;
 
-import com.example.myapplication.database.group.Group;
-import com.example.myapplication.database.group.GroupDao;
-import com.example.myapplication.database.student.Student;
-import com.example.myapplication.database.student.StudentDao;
+import com.example.myapplication.database.article.ArticleDao;
+import com.example.myapplication.database.fine.FineDao;
+import com.example.myapplication.database.article.Article;
+import com.example.myapplication.database.fine.Fine;
 
-@Database(entities = {Student.class, Group.class}, version = 1, exportSchema = false)
+@Database(entities = {Fine.class, Article.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
-    public abstract StudentDao studentDao();
+    public abstract FineDao fineDao();
 
-    public abstract GroupDao groupDao();
+    public abstract ArticleDao articleDao();
 }

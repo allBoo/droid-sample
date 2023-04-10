@@ -1,0 +1,76 @@
+{
+  "articles": [
+    {
+      "id": 1,
+      "name": "Ст. 18.13 Ч.1",
+      "fines": [
+        50000
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Ст. 18.13 Ч.2",
+      "fines": [
+        50000,
+        80000
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Ст. 18.13 Ч.3",
+      "fines": [
+        100000
+      ]
+    }
+  ],
+  "fines": [
+    {
+      "id": 1,
+      "plateNumber": "A555TT73",
+      "issueDateTime": "2023-03-17T07:23:19.120+00:00",
+      "articleId": 1,
+      "fineAmount": 500000,
+      "email": "email1@mail.ru"
+    },
+    {
+      "id": 2,
+      "plateNumber": "X234AK73",
+      "issueDateTime": "2023-03-17T07:25:19.120+00:00",
+      "articleId": 1,
+      "fineAmount": 500000,
+      "email": "email1@mail.ru"
+    },
+    {
+      "id": 3,
+      "plateNumber": "A555TT73",
+      "issueDateTime": "2023-03-17T07:21:19.120+00:00",
+      "articleId": 1,
+      "fineAmount": 500000,
+      "email": "email3@mail.ru"
+    },
+    {
+      "id": 4,
+      "plateNumber": "T546EE54",
+      "issueDateTime": "2023-03-18T07:25:22.020+00:00",
+      "articleId": 2,
+      "fineAmount": 800000,
+      "email": "email2@mail.ru"
+    },
+    {
+      "id": 5,
+      "plateNumber": "X657XX99",
+      "issueDateTime": "2023-03-22T07:25:22.020+00:00",
+      "articleId": 2,
+      "fineAmount": 500000,
+      "email": "email2@mail.ru"
+    },
+    {
+      "articleId": 2,
+      "email": "email65@mail.ru",
+      "fineAmount": 1000000,
+      "id": 6,
+      "issueDateTime": "2023-04-01T12:25:22.020+00:00",
+      "plateNumber": "X678PO23"
+    }
+  ]
+}

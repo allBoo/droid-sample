@@ -4,8 +4,8 @@
     <data>
 
     <variable
-            name="student"
-            type="com.example.myapplication.database.student.Student" />
+            name="fine"
+            type="com.example.myapplication.database.fine.Fine" />
     </data>
 
     <LinearLayout
@@ -30,7 +30,7 @@
                 android:maxLines="1"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                android:text="@{student.lastName + ' ' + student.firstName}" />
+                android:text="@{fine.plateNumber + ' ' + fine.issueDateTime}" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -39,7 +39,7 @@
                 android:fontFamily="sans-serif-condensed"
                 android:gravity="end"
                 android:maxLines="2"
-                android:text="@string/student_item_caption"
+                android:text="@string/fine_item_caption"
                 android:textSize="14sp"
                 android:textStyle="normal" />
         </LinearLayout>
@@ -64,7 +64,7 @@
                 android:fontFamily="sans-serif-condensed"
                 android:maxLines="1"
                 android:textStyle="normal"
-                android:text="@{student.phone}" />
+                android:text="@{`` + fine.fineAmount}" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -73,7 +73,7 @@
                 android:fontFamily="sans-serif-condensed"
                 android:maxLines="1"
                 android:textStyle="normal"
-                android:text="@{student.email}" />
+                android:text="@{fine.email}" />
         </LinearLayout>
 
     </LinearLayout>

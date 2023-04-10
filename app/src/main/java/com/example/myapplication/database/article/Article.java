@@ -1,4 +1,4 @@
-package com.example.myapplication.database.group;
+package com.example.myapplication.database.article;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
@@ -7,21 +7,22 @@ import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
 
-@Entity(tableName = "groups")
-public class Group implements Serializable {
+@Entity(tableName = "articles")
+public class Article implements Serializable {
     @NonNull
     @PrimaryKey(autoGenerate = true)
     private Integer id;
+
     @NonNull
     private String name;
 
-    public Group(@NonNull Integer id, @NonNull String name) {
+    public Article(@NonNull Integer id, @NonNull String name) {
         this.id = id;
         this.name = name;
     }
 
     @Ignore
-    public Group(@NonNull String name) {
+    public Article(@NonNull String name) {
         this.name = name;
     }
 

@@ -1,14 +1,14 @@
 <resources>
     <string name="app_name">My Application</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="main_fragment_title">Список студентов</string>
-    <string name="view_fragment_title">Информация о студенте</string>
-    <string name="student_item_caption">Студент</string>
-    <string name="student_last_name">Фамилия</string>
-    <string name="student_first_name">Имя</string>
-    <string name="student_group">Группа</string>
-    <string name="student_phone">Телефон</string>
-    <string name="student_email">E-mail</string>
+    <string name="main_fragment_title">Список штрафов</string>
+    <string name="view_fragment_title">Информация о штрафе</string>
+    <string name="fine_item_caption">Штраф</string>
+    <string name="fine_plate_number">Номер Авто</string>
+    <string name="fine_issue_date_time">Дата и Время</string>
+    <string name="fine_article">Статья</string>
+    <string name="fine_fine_amount">Сумма Штрафа</string>
+    <string name="fine_email">Отправить на E-mail</string>
     <string name="button_add">Добавить</string>
     <string name="button_save">Сохранить</string>
     <string name="button_update">Обновить</string>

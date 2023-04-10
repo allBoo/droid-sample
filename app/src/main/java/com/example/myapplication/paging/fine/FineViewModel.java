@@ -1,4 +1,4 @@
-package com.example.myapplication.paging.student;
+package com.example.myapplication.paging.fine;
 
 import androidx.lifecycle.ViewModel;
 import androidx.paging.Pager;
@@ -6,23 +6,23 @@ import androidx.paging.PagingConfig;
 import androidx.paging.PagingData;
 import androidx.paging.rxjava3.PagingRx;
 
-import com.example.myapplication.database.student.Student;
-import com.example.myapplication.database.student.StudentDao;
-import com.example.myapplication.network.StudentRemoteMediator;
+import com.example.myapplication.database.fine.Fine;
+import com.example.myapplication.database.fine.FineDao;
+import com.example.myapplication.network.FineRemoteMediator;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-public class StudentViewModel extends ViewModel {
-    private final StudentDao studentDao;
-    private final StudentRemoteMediator studentRemoteMediator;
+public class FineViewModel extends ViewModel {
+    private final FineDao fineDao;
+    private final FineRemoteMediator fineRemoteMediator;
 
-    public StudentViewModel(StudentDao studentDao,
-                            StudentRemoteMediator studentRemoteMediator) {
-        this.studentDao = studentDao;
-        this.studentRemoteMediator = studentRemoteMediator;
+    public FineViewModel(FineDao fineDao,
+                         FineRemoteMediator fineRemoteMediator) {
+        this.fineDao = fineDao;
+        this.fineRemoteMediator = fineRemoteMediator;
     }
 
     private PagingConfig createPagingConfig() {
@@ -37,28 +37,28 @@ public class StudentViewModel extends ViewModel {
                 Integer.MIN_VALUE);
     }
 
-    public Flowable<PagingData<Student>> getStudents() {
+    public Flowable<PagingData<Fine>> getFines() {
         return PagingRx.getFlowable(new Pager<>(
                 createPagingConfig(),
                 null,
-                studentRemoteMediator,
-                studentDao::getAll));
+                fineRemoteMediator,
+                fineDao::getAll));
     }
 
-    public Completable insert(Student student) {
-        return Completable.fromObservable(studentRemoteMediator.create(student))
+    public Completable insert(Fine fine) {
+        return Completable.fromObservable(fineRemoteMediator.create(fine))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Completable update(Student student) {
-        return Completable.fromObservable(studentRemoteMediator.update(student))
+    public Completable update(Fine fine) {
+        return Completable.fromObservable(fineRemoteMediator.update(fine))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Completable delete(Student student) {
-        return Completable.fromObservable(studentRemoteMediator.delete(student))
+    public Completable delete(Fine fine) {
+        return Completable.fromObservable(fineRemoteMediator.delete(fine))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

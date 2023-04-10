@@ -8,8 +8,8 @@
         <import type="android.view.View" />
 
         <variable
-            name="student"
-            type="com.example.myapplication.database.student.Student" />
+            name="fine"
+            type="com.example.myapplication.database.fine.Fine" />
 
         <variable
             name="isCreation"
@@ -40,9 +40,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/colorOnPrimary"
-                android:hint="@string/student_last_name"
+                android:hint="@string/fine_plate_number"
                 android:inputType="text"
-                android:text="@={student.lastName}" />
+                android:text="@={fine.plateNumber}" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -57,9 +57,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/colorOnPrimary"
-                android:hint="@string/student_first_name"
+                android:hint="@string/fine_issue_date_time"
                 android:inputType="text"
-                android:text="@={student.firstName}" />
+                android:text="@={fine.issueDateTime}" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <RelativeLayout
@@ -72,12 +72,12 @@
 
             <Spinner
                 style="@style/Widget.AppCompat.DropDownItem.Spinner"
-                android:id="@+id/groups"
+                android:id="@+id/articles"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/student_group"
+                android:hint="@string/fine_article"
                 android:spinnerMode="dropdown"
-                android:selectedItemPosition="@={student.groupId}" />
+                android:selectedItemPosition="@={fine.articleId}" />
         </RelativeLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -92,9 +92,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/colorOnPrimary"
-                android:hint="@string/student_phone"
-                android:inputType="phone"
-                android:text="@={student.phone}" />
+                android:hint="@string/fine_fine_amount"
+                android:inputType="numberSigned"
+                android:text="@={`` + fine.fineAmount}" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -109,22 +109,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/colorOnPrimary"
-                android:hint="@string/student_email"
+                android:hint="@string/fine_email"
                 android:inputType="textEmailAddress"
-                android:text="@={student.email}" />
+                android:text="@={fine.email}" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="@{() -> handler.onSave(student)}"
+            android:onClick="@{() -> handler.onSave(fine)}"
             android:text="@string/button_save"
             android:visibility="@{isCreation ? View.VISIBLE : View.GONE}" />
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="@{() -> handler.onUpdate(student)}"
+            android:onClick="@{() -> handler.onUpdate(fine)}"
             android:text="@string/button_update"
             android:visibility="@{isCreation ? View.GONE : View.VISIBLE}" />
 

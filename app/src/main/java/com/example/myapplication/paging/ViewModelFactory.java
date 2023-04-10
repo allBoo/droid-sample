@@ -8,13 +8,13 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.myapplication.database.AppDatabase;
 import com.example.myapplication.database.Database;
-import com.example.myapplication.database.group.GroupDao;
-import com.example.myapplication.database.student.StudentDao;
-import com.example.myapplication.network.StudentApi;
-import com.example.myapplication.network.StudentRemoteMediator;
-import com.example.myapplication.network.StudentService;
-import com.example.myapplication.paging.group.GroupViewModel;
-import com.example.myapplication.paging.student.StudentViewModel;
+import com.example.myapplication.database.article.ArticleDao;
+import com.example.myapplication.database.fine.FineDao;
+import com.example.myapplication.network.FineApi;
+import com.example.myapplication.network.FineRemoteMediator;
+import com.example.myapplication.network.FineService;
+import com.example.myapplication.paging.article.ArticleViewModel;
+import com.example.myapplication.paging.fine.FineViewModel;
 
 public class ViewModelFactory implements ViewModelProvider.Factory {
     private final Context applicationContext;
@@ -28,16 +28,16 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
     @SuppressWarnings("unchecked")
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         final AppDatabase database = Database.getDatabase(applicationContext);
-        if (modelClass.isAssignableFrom(StudentViewModel.class)) {
-            final StudentDao studentDao = database.studentDao();
-            final StudentApi studentApi = StudentService.getStudentApi();
-            final StudentRemoteMediator studentRemoteMediator =
-                    new StudentRemoteMediator(studentApi, database);
-            return (T) new StudentViewModel(studentDao, studentRemoteMediator);
+        if (modelClass.isAssignableFrom(FineViewModel.class)) {
+            final FineDao fineDao = database.fineDao();
+            final FineApi fineApi = FineService.getFineApi();
+            final FineRemoteMediator fineRemoteMediator =
+                    new FineRemoteMediator(fineApi, database);
+            return (T) new FineViewModel(fineDao, fineRemoteMediator);
         }
-        if (modelClass.isAssignableFrom(GroupViewModel.class)) {
-            final GroupDao groupDao = database.groupDao();
-            return (T) new GroupViewModel(groupDao);
+        if (modelClass.isAssignableFrom(ArticleViewModel.class)) {
+            final ArticleDao articleDao = database.articleDao();
+            return (T) new ArticleViewModel(articleDao);
         }
         throw new IllegalArgumentException("Unknown ViewModel class");
     }

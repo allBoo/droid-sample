@@ -35,7 +35,7 @@ class RetrofitFactory {
 
     public static Retrofit getRetrofit() {
         if (instance == null) {
-            synchronized (StudentService.class) {
+            synchronized (FineService.class) {
                 if (instance == null) {
                     instance = new RetrofitFactory(URL);
                 }
